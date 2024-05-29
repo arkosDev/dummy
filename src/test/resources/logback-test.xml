@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="log-path" value="/sysx/progs/logs" />
+	<property name="filename" value="api.transferencias.pda" />
+
+	<appender name="console"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+			</Pattern>
+		</layout>
+	</appender>
+
+	<!--appender name="RollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log-path}/${filename}.log</file>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+			</Pattern>
+		</encoder>
+
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log-path}/archived/${filename}-%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>25MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender-->
+
+	<include
+		resource="org/springframework/boot/logging/logback/base.xml" />
+	<springProfile name="dev,staging">
+		<logger name="guru.springframework.controllers" level="DEBUG"
+			additivity="false">
+			<appender-ref ref="console" />
+		</logger>
+		>
+	</springProfile>
+	<springProfile name="production">
+		<logger name="guru.springframework.controllers" level="WARN"
+			additivity="false">
+			<appender-ref ref="console" />
+		</logger>
+	</springProfile>
+
+	<!-- LOG everything at INFO level -->
+	<root level="info">
+		<appender-ref ref="console" />
+	</root>
+
+	<logger name="com.iarcos.orange" level="trace"
+		additivity="false">
+		<appender-ref ref="console" />
+	</logger>
+</configuration>
